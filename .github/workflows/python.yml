@@ -43,6 +43,6 @@ jobs:
         pytest
     - name: Test run start
       run: |
-        py main.py
-        ${{ secrets.DISCORD_TOKEN }
+        python main.py
+         ${{ secrets.DISCORD_TOKEN }
         
