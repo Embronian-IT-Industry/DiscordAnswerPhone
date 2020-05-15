@@ -12,8 +12,10 @@ on:
 jobs:
   build:
 
-    runs-on: [ubuntu-latest,windows-latest]
-#ubuntu18.04 
+    runs-on: windows-latest
+   #runs-on: ubuntu-latest 
+   #runs-on: macos-latest 
+   #runs-on: ubuntu-18.04 
     strategy:
       matrix:
         python-version: [3.7, 3.8]
