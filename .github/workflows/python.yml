@@ -44,5 +44,5 @@ jobs:
     - name: Test run start
       run: |
         python main.py
-         ${{ secrets.DISCORD_TOKEN }
+ # ${{ secrets.DISCORD_TOKEN }
         
