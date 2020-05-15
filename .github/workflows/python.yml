@@ -41,8 +41,8 @@ jobs:
     - name: Test run start
       run: |
         python main.py
-    - name: Test with pytest
-      run: |
-        pytest
+ #    - name: Test with pytest
+ #      run: |
+ #       pytest
  # ${{ secrets.DISCORD_TOKEN }
         
