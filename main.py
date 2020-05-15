@@ -1,3 +1,4 @@
+import fix_qt_import_error
 from discord import Client, LoginFailure
 import random
 import asyncio
@@ -118,13 +119,11 @@ class Game(QMainWindow, Ui_MainWindow):
         self.min_box.valueChanged.connect(self.change_min)
         self.run_button.clicked.connect(self.run_discord)
 
-    @asyncSlot
-    async def change_max(self):
+    def change_max(self):
         self.min_box.setMaximum(self.max_box.value() - 1)
         self.max_sleep_time = self.max_box.value()
 
-    @asyncSlot
-    async def change_min(self):
+    def change_min(self):
         self.max_box.setMinimum(self.min_box.value() + 1)
         self.min_sleep_time = self.min_box.value()
 
