@@ -1,7 +1,7 @@
 # DiscordAnswerPhone [[Rattysed]](https://github.com/Rattysed)
 ___
-## Автоотвечик на реализации discord.py + QtPy5
-___
+## Автоотвечик-бот с GUI частью для Discord на реализации discord.py + QtPy5
+
 ### Как следить за обновнениями?
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964779-3a067200-e423-11e9-9928-938b976af2c2.gif" height="155">
     
