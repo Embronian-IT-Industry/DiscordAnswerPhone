@@ -10,13 +10,13 @@ ___
 ### Я нашел баг или ошибку! 
 При обнаружении бага воспользуйтесь [Github Issue Tracker](https://github.com/Embronian-IT-Industry/DiscordAnswerPhone/issues)
 
-## Список всех библиотек:
+### Список всех библиотек:
  - QtPy5 - GUI 
  - asyncqt - поддержка работы discord.py + QtPy5
  - discord.py - Discord API
  - [etc...](https://Embronian-IT-Industry/DiscordAnswerPhone/releases) - Другие либы будут приклдаываться в [Release] сборках
 
-## FAQ - как установить?
+### FAQ - как установить?
  1.
  2.
  3.
@@ -27,7 +27,7 @@ ___
  8.
  
 
-## Текущие баги
+### Текущие баги
  - пока нет...
  - пока нет...
  - пока нет...
