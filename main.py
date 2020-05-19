@@ -20,188 +20,11 @@ ______________________________________________________________________
 ______________________________________________________________________
 """
 
-
-import fix_qt_import_error  # for .exe building
 from discord import Client, LoginFailure
 import random
 import asyncio
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QThread
-from PyQt5.QtWidgets import QApplication, QMainWindow
+import argparse
 import sys
-from qasync import QEventLoop, asyncSlot
-
-
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(600, 400)
-        MainWindow.setMinimumSize(QtCore.QSize(600, 400))
-        MainWindow.setMaximumSize(QtCore.QSize(600, 400))
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.run_button = QtWidgets.QPushButton(self.centralwidget)
-        self.run_button.setGeometry(QtCore.QRect(380, 320, 181, 23))
-        self.run_button.setObjectName("run_button")
-        self.stop_button = QtWidgets.QPushButton(self.centralwidget)
-        self.stop_button.setGeometry(QtCore.QRect(80, 320, 181, 23))
-        self.stop_button.setObjectName("run_button")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(30, 10, 161, 16))
-        self.label.setObjectName("label")
-        self.token_edit = QtWidgets.QLineEdit(self.centralwidget)
-        self.token_edit.setGeometry(QtCore.QRect(30, 40, 201, 31))
-        self.token_edit.setObjectName("token_edit")
-        self.min_box = QtWidgets.QSpinBox(self.centralwidget)
-        self.min_box.setGeometry(QtCore.QRect(320, 30, 51, 31))
-        self.min_box.setReadOnly(False)
-        self.min_box.setButtonSymbols(QtWidgets.QAbstractSpinBox.UpDownArrows)
-        self.min_box.setMinimum(5)
-        self.min_box.setMaximum(89)
-        self.min_box.setObjectName("min_box")
-        self.max_box = QtWidgets.QSpinBox(self.centralwidget)
-        self.max_box.setGeometry(QtCore.QRect(400, 30, 51, 31))
-        self.max_box.setReadOnly(False)
-        self.max_box.setButtonSymbols(QtWidgets.QAbstractSpinBox.UpDownArrows)
-        self.max_box.setMinimum(6)
-        self.max_box.setMaximum(90)
-        self.max_box.setObjectName("max_box")
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(330, 10, 31, 16))
-        self.label_2.setObjectName("label_2")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(410, 10, 31, 16))
-        self.label_3.setObjectName("label_3")
-        self.channel_id_line = QtWidgets.QLineEdit(self.centralwidget)
-        self.channel_id_line.setGeometry(QtCore.QRect(30, 130, 181, 20))
-        self.channel_id_line.setMaxLength(20)
-        self.channel_id_line.setCursorMoveStyle(QtCore.Qt.LogicalMoveStyle)
-        self.channel_id_line.setObjectName("channel_id_line")
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(30, 110, 161, 16))
-        self.label_4.setObjectName("label_4")
-        self.phrase_1_box = QtWidgets.QLineEdit(self.centralwidget)
-        self.phrase_1_box.setGeometry(QtCore.QRect(30, 190, 181, 20))
-        self.phrase_1_box.setMaxLength(20)
-        self.phrase_1_box.setCursorMoveStyle(QtCore.Qt.LogicalMoveStyle)
-        self.phrase_1_box.setObjectName("phrase_1_box")
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(30, 170, 231, 16))
-        self.label_5.setObjectName("label_5")
-        self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(30, 230, 111, 16))
-        self.label_6.setObjectName("label_6")
-        self.phrase_1_box_2 = QtWidgets.QLineEdit(self.centralwidget)
-        self.phrase_1_box_2.setGeometry(QtCore.QRect(30, 250, 181, 20))
-        self.phrase_1_box_2.setMaxLength(20)
-        self.phrase_1_box_2.setCursorMoveStyle(QtCore.Qt.LogicalMoveStyle)
-        self.phrase_1_box_2.setObjectName("phrase_1_box_2")
-        self.label_7 = QtWidgets.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(330, 230, 111, 16))
-        self.label_7.setObjectName("label_7")
-        self.start_number = QtWidgets.QLineEdit(self.centralwidget)
-        self.start_number.setGeometry(QtCore.QRect(330, 250, 41, 20))
-        self.start_number.setMaxLength(20)
-        self.start_number.setCursorMoveStyle(QtCore.Qt.LogicalMoveStyle)
-        self.start_number.setObjectName("start_number")
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 21))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        self.statusbar.setEnabled(True)
-        MainWindow.setStatusBar(self.statusbar)
-
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Economy destructor"))
-        self.run_button.setText(_translate("MainWindow", "RUN ASSISTANT"))
-        self.stop_button.setText(_translate("MainWindow", "STOP ASSISTANT"))
-        self.label.setText(_translate("MainWindow", "Введите token от аккаунта"))
-        self.label_2.setText(_translate("MainWindow", "MIN "))
-        self.label_3.setText(_translate("MainWindow", "MAX"))
-        self.label_4.setText(_translate("MainWindow", "ID канала для работы"))
-        self.label_5.setText(_translate("MainWindow", "Тип действия (добываю/строю и т.д.)"))
-        self.label_6.setText(_translate("MainWindow", "Ресурс/постройка"))
-        self.label_7.setText(_translate("MainWindow", "Стартовое значение"))
-
-
-class DiscordRun(QThread):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    @asyncSlot
-    async def run(self):
-        pass
-
-
-class Game(QMainWindow, Ui_MainWindow):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-        self.min_sleep_time = 5
-        self.max_sleep_time = 6
-        self.channel_id = 0
-        self.client = DSBotClient()
-        self.counter = 0
-        self.work = 'Добываю'
-        self.resourse = 'говно'
-
-        self.client.loop.create_task(auto_message())
-
-    def initUI(self):
-        super().setupUi(self)
-        self.max_box.valueChanged.connect(self.change_max)
-        self.min_box.valueChanged.connect(self.change_min)
-        self.run_button.clicked.connect(self.run_discord)
-
-    def change_max(self):
-        self.min_box.setMaximum(self.max_box.value() - 1)
-        self.max_sleep_time = self.max_box.value()
-
-    def change_min(self):
-        self.max_box.setMinimum(self.min_box.value() + 1)
-        self.min_sleep_time = self.min_box.value()
-
-    @asyncSlot()
-    async def run_discord(self):
-        try:
-            self.channel_id = int(self.channel_id_line.text())
-        except Exception:
-            self.statusBar().showMessage('ID канала - число!')
-            return
-        try:
-            self.counter = int(self.start_number.text())
-        except Exception:
-            self.statusBar().showMessage('Стартовое значение это число!')
-            return
-        self.resourse = self.phrase_1_box_2.text()
-        self.work = self.phrase_1_box.text()
-        self.token = self.token_edit.text()
-        if not all((self.token, self.resourse, self.work)):
-            self.statusBar().showMessage('Необходимо заполнить все поля!')
-            return
-        print((self.token, self.resourse, self.work))
-        try:
-            print(2)
-
-            await self.client.run(self.token)
-            print(3)
-        except LoginFailure as e:
-            self.statusBar().showMessage('неверный токен')
-            print('not done!')
-            return
-        except Exception as e:
-            print(e)
-            print(type(e))
-            return
-
-        print('done!')
 
 
 class DSBotClient(Client):
@@ -229,38 +52,65 @@ class DSBotClient(Client):
 
 async def auto_message():
     print('run!')
-    await ex.client.wait_until_ready()
-    ex.client.channel_id = ex.channel_id
-    ex.client.counter = ex.counter
-    ex.client.work = ex.work
-    ex.client.resourse = ex.resourse
-    ex.client.min_sleep = ex.min_sleep_time
-    ex.client.max_sleep = ex.max_sleep_time
+    client.channel_id = args.channel_id
+    client.counter = args.counter
+    client.work = args.work_type
+    client.resourse = args.resourse
+    client.min_sleep = args.min_time
+    client.max_sleep = args.max_time
     print('m?')
     await asyncio.sleep(5)
-    for guild in ex.client.guilds:
-        for channel in guild.text_channels:
-            if channel.id == ex.client.channel_id:
-                ex.client.channel = channel
-                return
-    if ex.client.channel is None:
-        await ex.client.logout()
+    print('mm?')
+    client.channel = client.get_channel(client.channel_id)
+    print('mmm?')
+    if client.channel is None:
+        print('Неверно указан ID канала')
+        raise SystemExit
     print('20 seconds left')
     await asyncio.sleep(1)
     while True:
-        print('message sent', ex.client.counter)
-        await ex.client.channel.send(f'{ex.client.work.capitalize()} {ex.client.resourse} {ex.client.counter}')
-        time_asleep = random.randint(ex.client.min_sleep, ex.client.max_sleep)
+        print('message sent', client.counter)
+        await client.channel.send(f'{client.work.capitalize()} {client.resourse} {client.counter}')
+        time_asleep = random.randint(client.min_sleep, client.max_sleep)
         print(f'sleeping {time_asleep} seconds')
         await asyncio.sleep(time_asleep)
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    loop = QEventLoop(app)
-    asyncio.set_event_loop(loop)
+    client = DSBotClient()
+    parser = argparse.ArgumentParser(
+        description="Запуск бота, автоматизируещего добычу")
+    parser.add_argument('token', type=str,
+                        help='Токен вашего аккаунта')
+    parser.add_argument('channel_id', type=int,
+                        help='ID канала для работы')
+    parser.add_argument('work_type', type=str,
+                        help='Действие, выполняемое аккаунтом')
+    parser.add_argument('resourse', type=str,
+                        help='Ресурс/строение, исполняемое')
+    parser.add_argument('counter', type=int,
+                        help='Значение на момент старта скрипта')
+    parser.add_argument('--min_time', type=int, default=15,
+                        help='Минимальное время задержки между сообщениями(в секундах)')
+    parser.add_argument('--max_time', type=int, default=30,
+                        help='Максимальное время задержки между сообщениями(в секундах)')
+    parser.add_argument('--extra_line', type=str, default='{w} {r} {c}',
+                        help='''Вы можете создать нестандартную строку вывода сообщения в Дискорд.
+                           {w} - тип работы;
+                           {r} - объект работы;
+                           {c} - значение, выводимое скриптом.
+                        Если один из параметров будет пропущен, скрипт не запустится''')
+    args = parser.parse_args()
+    if '{w}' not in args.extra_line or '{r}' not in args.extra_line or '{c}' not in args.extra_line:
+        print('Неверно задана дополнительная строка')
+        raise SystemExit
+    if args.min_time >= args.max_time:
+        print('Минимальное время должно быть меньше максимального')
+        raise SystemExit
+    try:
+        client.loop.create_task(auto_message())
+        client.run(args.token, bot=True)
+    except LoginFailure:
+        print('Неверный токен')
+        raise SystemExit
 
-    ex = Game()
-    ex.show()
-    loop.run_forever()
-    # NzAxOTIwNDM4ODA4NDc3ODA3.XsB8xA.igtHu0SB26BGC9sRdgbt7cu4n-c "mfa.rkGp5LnzcUwhNpTvecbSdG9XUE4HsTFtmKG63DwAmF2lC6fI7hP1-Sqy0VrvwNronU5kiYqRpUelaexo6b1g"
