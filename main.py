@@ -21,14 +21,15 @@ ______________________________________________________________________
 """
 
 
-import fix_qt_import_error
+import fix_qt_import_error  # for .exe building
 from discord import Client, LoginFailure
 import random
 import asyncio
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys
-from asyncqt import QEventLoop, asyncSlot
+from qasync import QEventLoop, asyncSlot
 
 
 class Ui_MainWindow(object):
@@ -42,6 +43,9 @@ class Ui_MainWindow(object):
         self.run_button = QtWidgets.QPushButton(self.centralwidget)
         self.run_button.setGeometry(QtCore.QRect(380, 320, 181, 23))
         self.run_button.setObjectName("run_button")
+        self.stop_button = QtWidgets.QPushButton(self.centralwidget)
+        self.stop_button.setGeometry(QtCore.QRect(80, 320, 181, 23))
+        self.stop_button.setObjectName("run_button")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(30, 10, 161, 16))
         self.label.setObjectName("label")
@@ -117,6 +121,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Economy destructor"))
         self.run_button.setText(_translate("MainWindow", "RUN ASSISTANT"))
+        self.stop_button.setText(_translate("MainWindow", "STOP ASSISTANT"))
         self.label.setText(_translate("MainWindow", "Введите token от аккаунта"))
         self.label_2.setText(_translate("MainWindow", "MIN "))
         self.label_3.setText(_translate("MainWindow", "MAX"))
@@ -126,13 +131,26 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "Стартовое значение"))
 
 
+class DiscordRun(QThread):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    @asyncSlot
+    async def run(self):
+        pass
+
+
 class Game(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
         self.min_sleep_time = 5
         self.max_sleep_time = 6
+        self.channel_id = 0
         self.client = DSBotClient()
+        self.counter = 0
+        self.work = 'Добываю'
+        self.resourse = 'говно'
 
         self.client.loop.create_task(auto_message())
 
@@ -171,19 +189,12 @@ class Game(QMainWindow, Ui_MainWindow):
         print((self.token, self.resourse, self.work))
         try:
             print(2)
+
             await self.client.run(self.token)
             print(3)
         except LoginFailure as e:
             self.statusBar().showMessage('неверный токен')
             print('not done!')
-            return
-        except ValueError:
-            self.statusBar().showMessage('Неправильно задан ID канала')
-            await self.client.logout()
-            return
-        except SyntaxError:
-            self.statusBar().showMessage('У вас нет роли доступа в экономику!')
-            await self.client.logout()
             return
         except Exception as e:
             print(e)
@@ -212,11 +223,13 @@ class DSBotClient(Client):
     async def on_message(self, message):
         if message.channel.id == self.channel_id:
             print('qq')
-            if 'добываю'.lower() in message.content.lower() and self.resourse.lower() in message.content.lower():
+            if 'добываю' in message.content.lower() and self.resourse.lower() in message.content.lower():
                 self.counter += 1
 
 
 async def auto_message():
+    print('run!')
+    await ex.client.wait_until_ready()
     ex.client.channel_id = ex.channel_id
     ex.client.counter = ex.counter
     ex.client.work = ex.work
@@ -225,24 +238,13 @@ async def auto_message():
     ex.client.max_sleep = ex.max_sleep_time
     print('m?')
     await asyncio.sleep(5)
-    async for guild in ex.client.guilds:
-        async for channel in guild.text_channels:
+    for guild in ex.client.guilds:
+        for channel in guild.text_channels:
             if channel.id == ex.client.channel_id:
                 ex.client.channel = channel
-                if ex.client.channel is None:
-                    raise ValueError
-                if not ex.client.end_channel is None:
-                    break
-            elif channel.id == ex.client.end_channel_id:
-                ex.client.end_channel = channel
-                if ex.client.end_channel is None:
-                    raise SyntaxError
-                if not ex.client.channel is None:
-                    break
+                return
     if ex.client.channel is None:
-        raise ValueError
-    if ex.client.end_channel is None:
-        raise SyntaxError
+        await ex.client.logout()
     print('20 seconds left')
     await asyncio.sleep(1)
     while True:
@@ -261,3 +263,4 @@ if __name__ == '__main__':
     ex = Game()
     ex.show()
     loop.run_forever()
+    # NzAxOTIwNDM4ODA4NDc3ODA3.XsB8xA.igtHu0SB26BGC9sRdgbt7cu4n-c "mfa.rkGp5LnzcUwhNpTvecbSdG9XUE4HsTFtmKG63DwAmF2lC6fI7hP1-Sqy0VrvwNronU5kiYqRpUelaexo6b1g"
