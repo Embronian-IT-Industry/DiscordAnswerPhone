@@ -46,18 +46,25 @@ class DSBotClient(Client):
     async def on_message(self, message):
         if message.channel.id == self.channel_id:
             print('qq')
-            if 'добываю' in message.content.lower() and self.resourse.lower() in message.content.lower():
+            if self.resourse.lower() in message.content.lower() and self.work.lower() in message.content.lower():
                 self.counter += 1
 
 
 async def auto_message():
     print('run!')
-    client.channel_id = args.channel_id
+    try:
+        client.channel_id = int(args.channel_id)
+    except Exception:
+        print('ID канала это число!')
+        raise SystemExit
     client.counter = args.counter
     client.work = args.work_type
     client.resourse = args.resourse
     client.min_sleep = args.min_time
     client.max_sleep = args.max_time
+    client.message = ' '.join(args.extra_line)
+    client.message = client.message.replace('{w}', client.work)
+    client.message = client.message.replace('{r}', client.resourse)
     print('m?')
     await asyncio.sleep(5)
     print('mm?')
@@ -67,10 +74,12 @@ async def auto_message():
         print('Неверно указан ID канала')
         raise SystemExit
     print('20 seconds left')
+
     await asyncio.sleep(1)
     while True:
         print('message sent', client.counter)
-        await client.channel.send(f'{client.work.capitalize()} {client.resourse} {client.counter}')
+        message = client.message.replace('{c}', str(client.counter))
+        await client.channel.send(message)
         time_asleep = random.randint(client.min_sleep, client.max_sleep)
         print(f'sleeping {time_asleep} seconds')
         await asyncio.sleep(time_asleep)
@@ -82,7 +91,7 @@ if __name__ == '__main__':
         description="Запуск бота, автоматизируещего добычу")
     parser.add_argument('token', type=str,
                         help='Токен вашего аккаунта')
-    parser.add_argument('channel_id', type=int,
+    parser.add_argument('channel_id', type=str,
                         help='ID канала для работы')
     parser.add_argument('work_type', type=str,
                         help='Действие, выполняемое аккаунтом')
@@ -94,14 +103,17 @@ if __name__ == '__main__':
                         help='Минимальное время задержки между сообщениями(в секундах)')
     parser.add_argument('--max_time', type=int, default=30,
                         help='Максимальное время задержки между сообщениями(в секундах)')
-    parser.add_argument('--extra_line', type=str, default='{w} {r} {c}',
+    parser.add_argument('--extra_line', type=str, default=['{w}', '{r}', '{c}'],
                         help='''Вы можете создать нестандартную строку вывода сообщения в Дискорд.
                            {w} - тип работы;
                            {r} - объект работы;
                            {c} - значение, выводимое скриптом.
-                        Если один из параметров будет пропущен, скрипт не запустится''')
+                        Если один из параметров будет пропущен, скрипт не запустится''',
+                        nargs='*')
     args = parser.parse_args()
-    if '{w}' not in args.extra_line or '{r}' not in args.extra_line or '{c}' not in args.extra_line:
+    print(args.extra_line)
+    line = ' '.join(args.extra_line)
+    if '{w}' not in line or '{r}' not in line or '{c}' not in line:
         print('Неверно задана дополнительная строка')
         raise SystemExit
     if args.min_time >= args.max_time:
@@ -109,7 +121,7 @@ if __name__ == '__main__':
         raise SystemExit
     try:
         client.loop.create_task(auto_message())
-        client.run(args.token, bot=True)
+        client.run(args.token, bot=False)
     except LoginFailure:
         print('Неверный токен')
         raise SystemExit
