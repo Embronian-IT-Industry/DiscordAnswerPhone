@@ -62,6 +62,7 @@ async def auto_message():
     client.resourse = args.resourse
     client.min_sleep = args.min_time
     client.max_sleep = args.max_time
+    client.last_value = args.last_value
     client.message = ' '.join(args.extra_line)
     client.message = client.message.replace('{w}', client.work)
     client.message = client.message.replace('{r}', client.resourse)
@@ -77,6 +78,8 @@ async def auto_message():
 
     await asyncio.sleep(1)
     while True:
+        if client.last_value > client.counter:
+            raise SystemExit
         print('message sent', client.counter)
         message = client.message.replace('{c}', str(client.counter))
         await client.channel.send(message)
@@ -103,6 +106,8 @@ if __name__ == '__main__':
                         help='Минимальное время задержки между сообщениями(в секундах)')
     parser.add_argument('--max_time', type=int, default=30,
                         help='Максимальное время задержки между сообщениями(в секундах)')
+    parser.add_argument('--last_value', type=int, default=200,
+                        help='Значение, после которого скрипт прекращает работу')
     parser.add_argument('--extra_line', type=str, default=['{w}', '{r}', '{c}'],
                         help='''Вы можете создать нестандартную строку вывода сообщения в Дискорд.
                            {w} - тип работы;
